@@ -5,14 +5,12 @@ import { renderHook } from 'test-utils/render'
 import {
   COINBASE_INJECTED_CONNECTOR,
   COINBASE_SDK_CONNECTOR,
-  INJECTED_CONNECTOR,
-  METAMASK_INJECTED_CONNECTOR,
+  UC_WALLET_CONNECTOR,
   UNISWAP_EXTENSION_CONNECTOR,
   UNISWAP_MOBILE_CONNECTOR,
   WALLET_CONNECT_CONNECTOR,
 } from 'test-utils/wagmi/fixtures'
 import { CONNECTION_PROVIDER_IDS } from 'uniswap/src/constants/web3'
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { useConnect } from 'wagmi'
 
 const UserAgentMock = jest.requireMock('utilities/src/platform')
@@ -30,12 +28,7 @@ jest.mock('components/Web3Provider/constants', () => ({
   useRecentConnectorId: jest.fn(),
 }))
 
-const DEFAULT_CONNECTORS = [
-  INJECTED_CONNECTOR,
-  WALLET_CONNECT_CONNECTOR,
-  COINBASE_SDK_CONNECTOR,
-  METAMASK_INJECTED_CONNECTOR,
-]
+const DEFAULT_CONNECTORS = [UC_WALLET_CONNECTOR, WALLET_CONNECT_CONNECTOR, COINBASE_SDK_CONNECTOR]
 
 describe('useOrderedConnections', () => {
   beforeEach(() => {
@@ -49,7 +42,7 @@ describe('useOrderedConnections', () => {
     const { result } = renderHook(() => useOrderedConnections())
 
     const expectedConnectors = [
-      { id: CONNECTION_PROVIDER_IDS.METAMASK_RDNS },
+      { id: CONNECTION_PROVIDER_IDS.UC_WALLET_CONNECTOR_ID },
       { id: CONNECTION_PROVIDER_IDS.WALLET_CONNECT_CONNECTOR_ID },
       { id: CONNECTION_PROVIDER_IDS.COINBASE_SDK_CONNECTOR_ID },
     ]
@@ -75,7 +68,7 @@ describe('useOrderedConnections', () => {
 
     const expectedConnectors = [
       { id: CONNECTION_PROVIDER_IDS.WALLET_CONNECT_CONNECTOR_ID },
-      { id: CONNECTION_PROVIDER_IDS.METAMASK_RDNS },
+      { id: CONNECTION_PROVIDER_IDS.UC_WALLET_CONNECTOR_ID },
       { id: CONNECTION_PROVIDER_IDS.COINBASE_SDK_CONNECTOR_ID },
     ]
 
@@ -89,27 +82,27 @@ describe('useOrderedConnections', () => {
     UserAgentMock.isMobileWeb = true
     const { result } = renderHook(() => useOrderedConnections())
     expect(result.current.length).toEqual(1)
-    expect(result.current[0].id).toEqual(CONNECTION_PROVIDER_IDS.METAMASK_RDNS)
+    expect(result.current[0].id).toEqual(CONNECTION_PROVIDER_IDS.UC_WALLET_CONNECTOR_ID)
   })
 
   it('should return only the Coinbase injected connector in the Coinbase Wallet', async () => {
     UserAgentMock.isMobileWeb = true
     mocked(useConnect).mockReturnValue({
-      connectors: [INJECTED_CONNECTOR, WALLET_CONNECT_CONNECTOR, COINBASE_SDK_CONNECTOR, COINBASE_INJECTED_CONNECTOR],
+      connectors: [UC_WALLET_CONNECTOR, WALLET_CONNECT_CONNECTOR, COINBASE_SDK_CONNECTOR, COINBASE_INJECTED_CONNECTOR],
     } as unknown as ReturnType<typeof useConnect>)
     const { result } = renderHook(() => useOrderedConnections())
     expect(result.current.length).toEqual(1)
     expect(result.current[0].id).toEqual(CONNECTION_PROVIDER_IDS.COINBASE_SDK_CONNECTOR_ID)
   })
 
-  it('should not return uniswap connections', () => {
+  it('should not return uniswap extension connectors', () => {
     mocked(useConnect).mockReturnValue({
       connectors: [...DEFAULT_CONNECTORS, UNISWAP_EXTENSION_CONNECTOR],
     } as unknown as ReturnType<typeof useConnect>)
     const { result } = renderHook(() => useOrderedConnections())
 
     const expectedConnectors = [
-      { id: CONNECTION_PROVIDER_IDS.METAMASK_RDNS },
+      { id: CONNECTION_PROVIDER_IDS.UC_WALLET_CONNECTOR_ID },
       { id: CONNECTION_PROVIDER_IDS.WALLET_CONNECT_CONNECTOR_ID },
       { id: CONNECTION_PROVIDER_IDS.COINBASE_SDK_CONNECTOR_ID },
     ]
@@ -123,11 +116,11 @@ describe('useOrderedConnections', () => {
   it('should include the fallback injected provider when no eip6963 injectors are present', async () => {
     window.ethereum = true as any
     mocked(useConnect).mockReturnValue({
-      connectors: [UNISWAP_MOBILE_CONNECTOR, INJECTED_CONNECTOR, WALLET_CONNECT_CONNECTOR, COINBASE_SDK_CONNECTOR],
+      connectors: [UNISWAP_MOBILE_CONNECTOR, UC_WALLET_CONNECTOR, WALLET_CONNECT_CONNECTOR, COINBASE_SDK_CONNECTOR],
     } as unknown as ReturnType<typeof useConnect>)
     const { result } = renderHook(() => useOrderedConnections())
     const expectedConnectors = [
-      { id: CONNECTION_PROVIDER_IDS.INJECTED_CONNECTOR_ID },
+      { id: CONNECTION_PROVIDER_IDS.UC_WALLET_CONNECTOR_ID },
       { id: CONNECTION_PROVIDER_IDS.WALLET_CONNECT_CONNECTOR_ID },
       { id: CONNECTION_PROVIDER_IDS.COINBASE_SDK_CONNECTOR_ID },
     ]
@@ -141,10 +134,10 @@ describe('useOrderedConnections', () => {
     UserAgentMock.isMobileWeb = true
     window.ethereum = true as any
     mocked(useConnect).mockReturnValue({
-      connectors: [INJECTED_CONNECTOR, WALLET_CONNECT_CONNECTOR, COINBASE_SDK_CONNECTOR],
+      connectors: [UC_WALLET_CONNECTOR, WALLET_CONNECT_CONNECTOR, COINBASE_SDK_CONNECTOR],
     } as unknown as ReturnType<typeof useConnect>)
     const { result } = renderHook(() => useOrderedConnections())
-    const expectedConnectors = [{ id: CONNECTION_PROVIDER_IDS.INJECTED_CONNECTOR_ID }]
+    const expectedConnectors = [{ id: CONNECTION_PROVIDER_IDS.UC_WALLET_CONNECTOR_ID }]
     result.current.forEach((connector, index) => {
       expect(connector.id).toEqual(expectedConnectors[index].id)
     })

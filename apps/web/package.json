@@ -236,6 +236,7 @@
     "@visx/shape": "2.18.0",
     "@web3-react/core": "8.2.3",
     "@web3-react/empty": "8.2.3",
+    "@web3-react/injected-connector": "6.0.7",
     "@web3-react/types": "8.2.3",
     "ajv": "8.11.0",
     "ajv-formats": "2.1.1",

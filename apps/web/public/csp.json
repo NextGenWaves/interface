@@ -1,21 +1,8 @@
 {
-  "defaultSrc": [
-    "'self'"
-  ],
-  "scriptSrc": [
-    "'self'",
-    "data:",
-    "'wasm-unsafe-eval'"
-  ],
-  "styleSrc": [
-    "'self'",
-    "'unsafe-inline'"
-  ],
-  "imgSrc": [
-    "*",
-    "blob:",
-    "data:"
-  ],
+  "defaultSrc": ["'self'"],
+  "scriptSrc": ["'self'", "data:", "'wasm-unsafe-eval'"],
+  "styleSrc": ["'self'", "'unsafe-inline'"],
+  "imgSrc": ["*", "blob:", "data:"],
   "frameSrc": [
     "'self'",
     "https://buy.moonpay.com/",
@@ -23,6 +10,7 @@
     "https://verify.walletconnect.org/"
   ],
   "connectSrc": [
+    "http://localhost:4000",
     "'self'",
     "blob:",
     "data:",
@@ -109,8 +97,5 @@
     "wss://ws-us3.pusher.com/",
     "wss://www.walletlink.org"
   ],
-  "workerSrc": [
-    "'self'",
-    "blob:"
-  ]
+  "workerSrc": ["'self'", "blob:"]
 }

@@ -1,5 +1,5 @@
-import INJECTED_LIGHT_ICON from 'assets/wallets/browser-wallet-light.svg'
-import METAMASK_ICON from 'assets/wallets/metamask-icon.svg'
+// apps/web/src/components/Web3Provider/injectedWithFallback.ts
+
 import { createConnector } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 
@@ -11,15 +11,16 @@ export function injectedWithFallback() {
       ...injectedConnector,
       connect(...params) {
         if (!window.ethereum) {
-          window.open('https://metamask.io/', 'inst_metamask')
+          window.open('https://ucwallet.com/', '_blank')
         }
         return injectedConnector.connect(...params)
       },
       get icon() {
-        return !window.ethereum || window.ethereum?.isMetaMask ? METAMASK_ICON : INJECTED_LIGHT_ICON
+        return '/images/logos/ucwallet-icon.png'
       },
+
       get name() {
-        return !window.ethereum ? 'Install MetaMask' : window.ethereum?.isMetaMask ? 'MetaMask' : 'Browser Wallet'
+        return 'UC Wallet'
       },
     }
   })

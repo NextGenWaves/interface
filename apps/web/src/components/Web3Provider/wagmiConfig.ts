@@ -14,12 +14,6 @@ import { createConfig, fallback, http } from 'wagmi'
 import { connect } from 'wagmi/actions'
 import { coinbaseWallet, injected, mock, safe, walletConnect } from 'wagmi/connectors'
 
-declare module 'wagmi' {
-  interface Register {
-    config: typeof wagmiConfig
-  }
-}
-
 export const orderedTransportUrls = (chain: ReturnType<typeof getChainInfo>): string[] => {
   const orderedRpcUrls = [
     ...(chain.rpcUrls.interface?.http ?? []),

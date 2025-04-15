@@ -5,7 +5,7 @@ export const ucwalletConnector = createConnector((config) => {
   return {
     id: 'com.ucwallet.injected',
     name: 'UC Wallet',
-    icon: '/images/logos/ucwallet-icon.png', // Assure-toi que le fichier existe
+    icon: '/images/logos/ucwallet-icon.png',
     type: 'injected',
     supportsSimulation: false,
 
@@ -30,7 +30,9 @@ export const ucwalletConnector = createConnector((config) => {
 
     async getAccounts() {
       const provider = window.ethereum
-      if (!provider) return []
+      if (!provider) {
+        return []
+      }
 
       const accounts = (await provider.request({ method: 'eth_accounts' })) as string[]
       return accounts.map(getAddress) as readonly `0x${string}`[]
